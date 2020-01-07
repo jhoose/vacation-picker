@@ -2,7 +2,7 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-6" v-theme="'red'">
 
                 <h1>{{ title }}</h1>
 
@@ -19,7 +19,7 @@
                         @click="selectCountry(index)"
                     >
                         <!-- shorthand for v-bind:HTML attribute is :HTML attribute -->
-                        <span v-bind:id="country.id" :title="country.details">
+                        <span v-bind:id="country.id" :title="country.details" v-rainbow>
                             {{ index }} {{ country.name }}
                         </span>
                     </li>
@@ -27,7 +27,8 @@
                 </ul>
 
             </div> <!-- END 1st col 6 -->
-            <div class="col-6">
+            <!-- <div class="col-6" v-theme="'red'"> -->
+            <div class="col-6" v-theme:background="'red'">
 
                 <h2>Selected:</h2>
                 <ul class="list-group">
