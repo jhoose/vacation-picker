@@ -3,6 +3,10 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
+// Add Bootstrap Styling...
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 new Vue({
   render: h => h(App),
 }).$mount('#app')
