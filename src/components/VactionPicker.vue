@@ -37,19 +37,15 @@
                     <li class="list-group-item">{{ selectedCountry.capital}}</li>
                     <li class="list-group-item">{{ selectedCountry.details}}</li>
                     <li class="list-group-item">
+                        <!-- Vue cannot get internal images (under assets folder) -->
                         <!-- <img :src="getImgUrl(selectedCountry.img)"
                              :alt="selectedCountry.img"
                              class="img-fluid" > -->
-                        <img src=""
+                        <img :src="getImgUrl(selectedCountry.img)"
                              :alt="selectedCountry.img"
                              class="img-fluid" >
                     </li>
-                    <!-- <li class="list-group-item" v-if="isExpensive">
-                        <span class="badge badge-danger badge-pill">
-                            Expensive!
-                        </span>
-                    </li> -->
-                    <li class="list-group-item">
+                    <li class="list-group-item" v-if="isExpensive">
                         <span class="badge badge-danger badge-pill">
                             Expensive!
                         </span>
@@ -58,6 +54,61 @@
                 
             </div> <!-- END 2nd col 6 -->
         </div> <!-- END 1st row -->
+
+        <div class="row">
+            <div class="col-6">
+
+                <h2>New Countries</h2>
+                <input type="text" class="form-control-lg" v-model="newCountry" @keyup.enter="addCountry()">
+                <button @click="addCountry()" class="btn btn-info">
+                    Add New Country
+                </button>
+
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="(country, index) in newCountries" :key="index">
+                        {{ country }}
+                    </li>
+                </ul>
+
+            </div> <!-- END 1st col 6 in 2nd row -->
+
+            <div class="col-6">
+
+                <div class="form-group">
+                    <label for=""><b>Countries Cheaper Than...</b></label>
+                    <select class="form-control" v-model="selectedCost" @change="filterCountriesByCost">
+                        <option value=""></option>
+                        <option v-for="(cost, index) in costs" :value="cost" :key="index">
+                            {{cost}}
+                        </option>
+                    </select>
+                </div>
+
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="(country, index) in costFilteredCountries" :key="index">
+                        {{ country.name }} ${{country.cost}}
+                    </li>
+                </ul>
+
+            </div> <!-- END 2nd col 6 in 2nd row -->
+        </div> <!-- END 2nd row -->
+
+        <div class="row">
+            <div class="col-6">
+                <div v-for="country in data.countries" :key="country.id">
+                    <input type="checkbox" :value="country.name" v-model="selectedCountriesByCheckbox">
+                    {{country.name}}
+                </div>
+
+            </div> <!-- END 1st col in 3rd row -->
+
+            <div class="col-6">
+                <h4>Selected Country Array From Checkboxes:</h4>
+                <br>
+                {{selectedCountriesByCheckbox}}
+
+            </div> <!-- END 2nd col in 3rd row -->
+        </div> <!-- END 3rd row -->
 
 
         <h3>My counter: {{ counter }}</h3>
@@ -94,6 +145,7 @@
 <script>
     // the imported data var below must match the var within the data() function return
     import data from '../data/data';
+    import mixins from '../mixins/mixins'; // for new getImgUrl(img) now within mixins.js
 
     export default {
         name: "VacationPicker",
@@ -104,11 +156,37 @@
                 data,
                 title: 'Vue Vacation Picker',
                 counter: 0,
-                selectedCountryIndex: 0
+                selectedCountryIndex: 0,
+                newCountry: '',
+                newCountries: [],
+                costs: [1000, 2000, 3000, 4000, 5000, 6000],
+                selectedCost: 1000,
+                costFilteredCountries: [],
+                selectedCountriesByCheckbox: [],
             }
 
         },
+        created(){ // created(){}, is a life cycle hook
+            // The created life cycle hook has access to the things in the data(){}, (above)
+            // eslint-disable-next-line no-console
+            console.log("Vacation Picker is created...");
+            this.title = 'Created from lifecycle hook...'; // example
+            // life cycle hooks can also be put into a mixin
+        },
+        mixins: [mixins],
         methods: {
+            filterCountriesByCost(){
+                this.costFilteredCountries = this.data.countries.filter(country => country.cost < this.selectedCost);
+                // this.costFilteredCountries = this.selectedCost;
+            },
+            addCountry(){
+                this.newCountries.push(this.newCountry);
+                // eslint-disable-next-line no-console
+                console.log(this.newCountries);
+
+                // Set newCountry page data variable back to empty string.
+                this.newCountry = '';
+            },
             increment(){
                 this.counter++;
             },
@@ -121,7 +199,15 @@
             selectCountry(index) {
                 // using @click method and defining var to passed in param caches the country index
                 this.selectedCountryIndex = index;
-            }
+            },
+            // getImgUrl(img) {
+            //     // to get relative path assets like images you have to use WebPack's require() function
+            //     // because Vue cannot do relative assets
+            //     // NOTE: Vue CAN do external links and images just fine, you just have to start with http or https
+            //     // eslint-disable-next-line no-console
+            //     console.log(img);
+            //     return require('../assets/flags/' + img);
+            // }
 
         },
         computed: {
@@ -138,7 +224,12 @@
                     // use ES6 javascript to write the short-hand way of doing this aka spread operator using "..."
                     ...this.data.countries[this.selectedCountryIndex]
                 }
-            }
+            }, // END selectedCountry
+            // NOTE: Computed properites are WRITTEN like functions but they are properties
+            isExpensive() {
+                // return true or false = is currently selected country's cost is over $4000?
+                return this.data.countries[this.selectedCountryIndex].cost > 4000;
+            } // END selectedCountry
         }
         
     }
