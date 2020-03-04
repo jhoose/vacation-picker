@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+// To make filters (format pipes) in filter folder global add aka import them here so that the whole application has access to them
+import './filters/filters';
+
 // custom directives https://www.youtube.com/watch?v=3-fLYMEKOU0
 //Vue.directive('nameOfDirective', { object that contains a bind() funciton })
 Vue.directive('rainbow', {

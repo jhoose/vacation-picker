@@ -20,7 +20,7 @@
                     >
                         <!-- shorthand for v-bind:HTML attribute is :HTML attribute -->
                         <span v-bind:id="country.id" :title="country.details" v-rainbow>
-                            {{ index }} {{ country.name }}
+                            {{ index }} {{ country.name | uppercase }} <!-- added uppercase filter aka format pipe -->
                         </span>
                     </li>
 
@@ -177,6 +177,21 @@
             }
 
         },
+        // Commented filter object here because created global filter instead
+        // filter (really format) data, in this example transform Country Names to all Uppercase letters
+        // filters: { // filter object, this is a local filter object - as it's only scoped to this component
+        //     uppercase(value) {
+
+        //         // if there's not value being passed in immediately return - this should be the 1st thing in every filter object
+        //         if(!value) {
+        //             return;
+        //         }
+
+        //         return value.toUpperCase();
+
+        //     }
+
+        // }, 
         created(){ // created(){}, is a life cycle hook
             // The created life cycle hook has access to the things in the data(){}, (above)
             // eslint-disable-next-line no-console
@@ -185,7 +200,7 @@
             // life cycle hooks can also be put into a mixin
         },
         mixins: [mixins],
-        methods: {
+        methods: { // method object
             filterCountriesByCost(){
                 this.costFilteredCountries = this.data.countries.filter(country => country.cost < this.selectedCost);
                 // this.costFilteredCountries = this.selectedCost;
@@ -221,7 +236,7 @@
             // }
 
         },
-        computed: {
+        computed: { // computed object
             selectedCountry(){
                 return {
                     // below is the long way of doing this
