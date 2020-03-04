@@ -28,4 +28,21 @@ Vue.filter('currency', function (value, currencyCode) {
     })
     .format(value)
 
-})
+});
+
+
+// A MORE dynamic filter...
+    Vue.filter('currency', function (value, currencyCode, locationCode) {
+    
+        // if there's not value being passed in immediately return - this should be the 1st thing in every filter object
+        if(!value) {
+            return;
+        }
+    
+        return new Intl.NumberFormat(locationCode, {
+            style: 'currency',
+            currency: currencyCode
+        })
+        .format(value)
+    
+    })

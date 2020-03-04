@@ -35,7 +35,10 @@
                     <li class="list-group-item">{{ selectedCountry.id}}</li>
                     <li class="list-group-item">{{ selectedCountry.name}}</li>
                     <!-- Added custom format pipe aka filter with parameter, try USD, EUR -->
-                    <li class="list-group-item">{{ selectedCountry.cost | currency('USD') }}</li>
+                    <!-- <li class="list-group-item">{{ selectedCountry.cost | currency('USD') }}</li> -->
+
+                    <!-- More dynamic filter below, passing in locationCode -->
+                    <li class="list-group-item">{{ selectedCountry.cost | currency('USD', 'en-us') }}</li>
                     <li class="list-group-item">{{ selectedCountry.capital}}</li>
                     <li class="list-group-item">{{ selectedCountry.details}}</li>
                     <li class="list-group-item">
