@@ -100,12 +100,22 @@
                     {{country.name}}
                 </div>
 
+                <br>
+                <h4>Selected Country Array From Checkboxes:</h4>
+                {{selectedCountriesByCheckbox}}
+
             </div> <!-- END 1st col in 3rd row -->
 
             <div class="col-6">
-                <h4>Selected Country Array From Checkboxes:</h4>
+                
+                <div v-for="country in data.countries" :key="country.id">
+                    <input type="radio" :value="country.name" v-model="selectedCountriesByRadioButton">
+                    {{country.name}}
+                </div>
+
                 <br>
-                {{selectedCountriesByCheckbox}}
+                <h4>Selected Country From Radio Buttons:</h4>
+                {{selectedCountriesByRadioButton}}
 
             </div> <!-- END 2nd col in 3rd row -->
         </div> <!-- END 3rd row -->
@@ -163,6 +173,7 @@
                 selectedCost: 1000,
                 costFilteredCountries: [],
                 selectedCountriesByCheckbox: [],
+                selectedCountriesByRadioButton: ""
             }
 
         },

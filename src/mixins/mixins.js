@@ -5,7 +5,7 @@ export default {
             // because Vue cannot do relative assets
             // NOTE: Vue CAN do external links and images just fine, you just have to start with http or https
             // eslint-disable-next-line no-console
-            // console.log(img);
+            //console.log(img);
             return require('../assets/flags/' + img);
         }
     }
