@@ -125,6 +125,31 @@
             </div> <!-- END 2nd col in 3rd row -->
         </div> <!-- END 3rd row -->
 
+        <div class="row">
+            <div class="col-6">
+            
+            <!-- empty column add new things here -->
+
+            </div> <!-- END 1st col in 4rd row -->
+            <div class="col-6">
+                <h2>Filtered Countries</h2>
+                <input type="text" class="form-control-lg" v-model="filteredText" placeholder="Type here...">
+
+                <ul class="list-group">
+                    <li
+                        class="list-group-item"
+                        v-for="(country, index) in filterCountryList(filteredText)"
+                        :key="country.id"
+                        @click="selectCountry(index)"
+                    >
+                        <span v-bind:id="country.id" :title="country.details" v-rainbow>
+                            {{ index }} {{ country.name | uppercase }}
+                        </span>
+                    </li>
+                </ul>
+
+            </div> <!-- END 2nd col in 4rd row -->
+        </div> <!-- END 4rd row -->
 
         <h3>My counter: {{ counter }}</h3>
         <button v-on:click="counter++" type="button" class="btn btn-success">
@@ -178,7 +203,8 @@
                 selectedCost: 1000,
                 costFilteredCountries: [],
                 selectedCountriesByCheckbox: [],
-                selectedCountriesByRadioButton: ""
+                selectedCountriesByRadioButton: "",
+                filteredText: ""
             }
 
         },
@@ -206,6 +232,21 @@
         },
         mixins: [mixins],
         methods: { // method object
+            filterCountryList(filteredText){ // WARNING - filtering like this works well for small lists but KILLS performance on large lists!!!!!
+
+                // if there's no filtered country text entered into the input textbox then return, or better yet return all the countries
+                if(!filteredText) {
+                    return this.data.countries;
+                }
+
+                return this.data.countries.filter(
+                    country => {
+                        return country.name.toLowerCase().startsWith(filteredText.toLowerCase());
+                        // .toLowerCase() is a built-in JavaScript function
+                        // .startsWith() is a built-in JavaScript function - please note the "s" at the end of "starts"
+                    }
+                );
+            }, 
             filterCountriesByCost(){
                 this.costFilteredCountries = this.data.countries.filter(country => country.cost < this.selectedCost);
                 // this.costFilteredCountries = this.selectedCost;
